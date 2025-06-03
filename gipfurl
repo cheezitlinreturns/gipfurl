@@ -1,0 +1,36 @@
+#!/bin/bash
+
+# gipfurl: Get IP from URL(s) using dig
+
+# Check if dig is installed
+if ! command -v dig &> /dev/null; then
+    echo "Error: 'dig' command not found. Please install 'dnsutils' or 'bind-utils'."
+    exit 1
+fi
+
+# Function to extract hostname and get IP
+get_ip_from_url() {
+    local url="$1"
+    local hostname
+    hostname=$(echo "$url" | sed -E 's~^[a-zA-Z]+://~~;s~/.*~~;s~:.*~~')
+
+    if [ -z "$hostname" ]; then
+        echo "Invalid URL: $url"
+        return 1
+    fi
+
+    local ip
+    ip=$(dig +short "$hostname" | grep -E '^[0-9.]+$' | head -n 1)
+
+    if [ -z "$ip" ]; then
+        echo "$url -> Could not resolve IP"
+    else
+        echo "$url -> $ip"
+    fi
+}
+
+# Main loop over all arguments
+for url in "$@"; do
+    get_ip_from_url "$url"
+done
+
