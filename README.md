@@ -17,6 +17,10 @@ sudo ./instgipfurl.sh
 ```
 Let it install.
 
+NOTE: dig is a dependency of GIPFURL. install it if you dont have it. Use your native package manager, ill use pacman as that is my package manager.
+```
+sudo pacman -S dnsutils
+```
 # Using Gipfurl
 
 - 1:
